@@ -94,6 +94,7 @@ class Model:
         parziale = [v0]
 
         self._ricorsione(parziale,v1,t)
+        return self._bestCammino, self._bestScore
 
     def _ricorsione(self,parziale,v1,t):
         #verifico se parziale è soluzione valid, in caso salvo
@@ -111,7 +112,6 @@ class Model:
                 self._ricorsione(parziale,v1,t)
                 parziale.pop()
 
-        return self._bestCammino,self._bestScore
 
     def _getScore(self, parziale):
         sumPesi = 0

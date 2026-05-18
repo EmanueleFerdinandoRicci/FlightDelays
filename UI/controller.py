@@ -69,9 +69,6 @@ class Controller:
             )
         self._view.update_page()
 
-    def handleCercaItinerario(self,e):
-        pass
-
     def _fillDropdown(self, allNodes):
         for n in allNodes:
             self._view._ddAereoportoP.options.append(
@@ -123,14 +120,15 @@ class Controller:
         self._view._txtResults.controls.append(
             ft.Text(f"Ho trovato un cammino fra {self._choicePartenza} e {self._choiceArrivo}", color="green")
         )
-        for p in path:
+        for i, p in enumerate(path):
+            # Usiamo IATA_CODE e AIRPORT per renderlo chiaramente distinguibile
             self._view._txtResults.controls.append(
-                ft.Text(p)
+                ft.Text(f"Sosta {i}: {p.IATA_CODE} - {p.AIRPORT}")
             )
         self._view.update_page()
 
-    def handleCerca(self,e):
-        t = self._view._txtInNTratteMax.value
+    def handleCercaItinerario(self,e):
+        t = self._view._txtInTratteMax.value
 
         try:
             tInt = int(t)
