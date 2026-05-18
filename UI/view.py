@@ -9,6 +9,7 @@ class View(ft.UserControl):
         self._page.title = "Template application using MVC and DAO"
         self._page.horizontal_alignment = 'CENTER'
         self._page.theme_mode = ft.ThemeMode.DARK
+        self._page.window_width = 700
         # controller (it is not initialized. Must be initialized in the main, after the controller is created)
         self._controller = None
         # graphical elements
@@ -22,18 +23,20 @@ class View(ft.UserControl):
         #ROW1
         self._txtInCmin = ft.TextField(label="N min compagnie")
         self._btnAnalizzaAereoporti = ft.ElevatedButton(text="Analizza Aereoporti", on_click=self._controller.handleAnalizza)
-        row1 = ft.Row([ft.Container(None,width=250),ft.Container(self._txtInCmin,width=250),ft.Container(self._btnAnalizzaAereoporti,width=250)],alignment=ft.MainAxisAlignment.CENTER)
+        row1 = ft.Row([ft.Container(self._txtInCmin,width=250),ft.Container(self._btnAnalizzaAereoporti,width=250)],alignment=ft.MainAxisAlignment.CENTER)
 
         #ROW2
         self._ddAereoportoP = ft.Dropdown(label="Aereoporto di Partenza")
         self._btnAereoportiConnessi = ft.ElevatedButton(text="Aereoporti Connessi", on_click = self._controller.handleConnessi)
-        row2 = ft.Row([ft.Container(None,width=250),ft.Container( self._ddAereoportoP,width=250),ft.Container(self._btnAereoportiConnessi,width=250)],alignment=ft.MainAxisAlignment.CENTER)
+        self._ddAereoportoA = ft.Dropdown(label="Aereoporto di Arrivo")
+        self._btnTestConnessione = ft.ElevatedButton(text="Test Connessione", on_click=self._controller.handleTestConnessione)
+        row2 = ft.Row([ft.Container( self._ddAereoportoP,width=150),ft.Container(self._btnAereoportiConnessi,width=150),ft.Container(self._ddAereoportoA, width=150), ft.Container(self._btnTestConnessione,width=150)],alignment=ft.MainAxisAlignment.CENTER)
 
         #ROW3
-        self._ddAereoportoA = ft.Dropdown(label="Aereoporto di Arrivo")
         self._txtInTratteMax =ft.TextField(label="N max tratte")
         self._btnCercaItinerario = ft.ElevatedButton(text="Cerca Itinerario", on_click=self._controller.handleCercaItinerario)
-        row3 = ft.Row([ft.Container(self._ddAereoportoA, width=250), ft.Container(self._txtInTratteMax, width=250),
+
+        row3 = ft.Row([ ft.Container(self._txtInTratteMax, width=250),
                        ft.Container(self._btnCercaItinerario, width=250)], alignment=ft.MainAxisAlignment.CENTER)
 
         self._txtResults = ft.ListView(expand = 1,

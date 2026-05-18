@@ -54,7 +54,20 @@ class Controller:
         self._view.update_page()
 
     def handleConnessi(self,e):
-        pass
+        if self._choicePartenza is None:
+            self._view._txtResults.controls.clear()
+            self._view._txtResults.controls.append(
+                ft.Text("Attenzione per usare questo metodo serve un aereoporto di partenza", color="red")
+            )
+            self._view.update_page()
+            return
+        viciniT = self._model.getViciniOrdinati(self._choicePartenza)
+        self._view._txtResults.controls.clear()
+        for v in viciniT:
+            self._view._txtResults.controls.append(
+                ft.Text(f"{v[0]}-{v[1]}", color="green")
+            )
+        self._view.update_page()
 
     def handleCercaItinerario(self,e):
         pass
@@ -79,4 +92,65 @@ class Controller:
     def _choiceDdArrivo(self,e):
         self._choiceArrivo = e.control.data
         print(f"Hai selezionato come aereoporto di arrivo: {self._choiceArrivo}")
+
+    def handleTestConnessione(self,e):
+        if self._choicePartenza is None:
+            self._view._txtResults.controls.clear()
+            self._view._txtResults.controls.append(
+                ft.Text("Attenzione per usare questo metodo serve un aereoporto di partenza", color="red")
+            )
+            self._view.update_page()
+            return
+
+        if self._choiceArrivo is None:
+            self._view._txtResults.controls.clear()
+            self._view._txtResults.controls.append(
+                ft.Text("Attenzione per usare questo metodo serve un aereoporto di arrivo", color="red")
+            )
+            self._view.update_page()
+            return
+
+        if not self._model.hasPath(self._choicePartenza,self._choiceArrivo):
+            self._view._txtResults.controls.clear()
+            self._view._txtResults.controls.append(
+                ft.Text(f"Non ho trovato un percorso fra {self._choicePartenza} e {self._choiceArrivo}", color="orange")
+            )
+            self._view.update_page()
+            return
+
+        path = self._model.getPath(self._choicePartenza,self._choiceArrivo)
+        self._view._txtResults.controls.clear()
+        self._view._txtResults.controls.append(
+            ft.Text(f"Ho trovato un cammino fra {self._choicePartenza} e {self._choiceArrivo}", color="green")
+        )
+        for p in path:
+            self._view._txtResults.controls.append(
+                ft.Text(p)
+            )
+        self._view.update_page()
+
+    def handleCerca(self,e):
+        t = self._view._txtInNTratteMax.value
+
+        try:
+            tInt = int(t)
+        except ValueError:
+            self._view._txtResults.controls.clear()
+            self._view._txtResults.controls.append(
+                ft.Text(f"T deve essere intero", color="red")
+            )
+            self._view.update_page()
+            return
+
+        path,score = self._model.getCamminoOttimo(self._choicePartenza,self._choiceArrivo,tInt)
+        self._view._txtResults.controls.clear()
+        self._view._txtResults.controls.append(
+            ft.Text(f"Cammino trovato fra {self._choicePartenza} e {self._choiceArrivo}", color="green")
+        )
+        self._view._txtResults.controls.append(
+            ft.Text(f"Il cammino fra {self._choicePartenza} e {self._choiceArrivo} ha score {score}", color="green")
+        )
+        for p in path:
+            self._view._txtResults.controls.append(ft.Text(p))
+        self._view.update_page()
 
